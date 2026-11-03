@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>庄家管理后台 · 世界杯赌球系统</title>
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body class="admin-body">
+  <div class="admin-login-wrapper">
+    <div class="admin-login-card">
+      <div class="admin-login-header">
+        <div class="admin-logo">
+          <span class="admin-logo-icon">🏦</span>
+        </div>
+        <h1>庄家管理后台</h1>
+        <p class="admin-subtitle">World Cup Betting · Operator Console</p>
+      </div>
+      <form id="adminLoginForm" class="admin-form">
+        <div class="admin-form-group">
+          <label>管理员账号</label>
+          <div class="admin-input-wrap">
+            <span class="input-icon">👤</span>
+            <input type="text" id="adminUsername" placeholder="请输入庄家账号" autocomplete="off" required>
+          </div>
+        </div>
+        <div class="admin-form-group">
+          <label>安全密码</label>
+          <div class="admin-input-wrap">
+            <span class="input-icon">🔐</span>
+            <input type="password" id="adminPassword" placeholder="请输入管理密码" autocomplete="off" required>
+          </div>
+        </div>
+        <div class="admin-form-group">
+          <label>二次验证码</label>
+          <div class="admin-input-wrap admin-2fa-row">
+            <span class="input-icon">🛡️</span>
+            <input type="text" id="admin2FA" placeholder="请输入安全码" maxlength="6" autocomplete="off" required>
+            <span class="admin-hint">默认: 888888</span>
+          </div>
+        </div>
+        <button type="submit" class="admin-btn-primary" id="adminLoginBtn">
+          <span class="btn-text">验证身份并登录</span>
+        </button>
+        <p class="admin-form-tip">
+          ⚠️ 此入口仅供系统庄家使用，所有操作将被记录审计
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <div class="admin-toast" id="adminToast"></div>
+  <script src="js/admin.js"></script>
+</body>
+</html>

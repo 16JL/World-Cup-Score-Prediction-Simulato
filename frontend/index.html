@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>世界杯 - 竞彩足球</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- 登录页面 -->
+  <div id="loginPage" class="page active">
+    <div class="login-container">
+      <div class="login-header">
+        <div class="login-logo">
+          <div class="logo-icon">⚽</div>
+          <h1>世界杯</h1>
+          <p>竞彩足球</p>
+        </div>
+      </div>
+      <div class="login-tabs">
+        <button class="tab-btn active" data-tab="login">登录</button>
+        <button class="tab-btn" data-tab="register">注册</button>
+      </div>
+      <form id="loginForm" class="auth-form">
+        <div class="form-group">
+          <label>账号</label>
+          <input type="text" id="loginAccount" placeholder="请输入系统账号或邮箱" required>
+        </div>
+        <div class="form-group">
+          <label>密码</label>
+          <input type="password" id="loginPassword" placeholder="请输入密码" required>
+        </div>
+        <button type="submit" class="btn-primary">登 录</button>
+        <p class="form-tip">新用户注册即送 <strong>1000元</strong> 体验金</p>
+      </form>
+      <form id="registerForm" class="auth-form" style="display:none">
+        <div class="form-group">
+          <label>邮箱地址</label>
+          <div class="input-with-btn">
+            <input type="email" id="regEmail" placeholder="请输入邮箱地址" required>
+            <button type="button" class="btn-send-code" id="btnSendCode">获取验证码</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>验证码</label>
+          <input type="text" id="regCode" placeholder="请输入6位验证码" maxlength="6" required>
+          <span class="code-hint" id="codeHint"></span>
+        </div>
+        <div class="form-group">
+          <label>昵称</label>
+          <input type="text" id="regNickname" placeholder="给自己起个名字吧">
+        </div>
+        <div class="form-group">
+          <label>设置密码</label>
+          <input type="password" id="regPassword" placeholder="至少6个字符" required>
+        </div>
+        <div class="form-group">
+          <label>确认密码</label>
+          <input type="password" id="regPassword2" placeholder="再次输入密码" required>
+        </div>
+        <button type="submit" class="btn-primary">注 册</button>
+        <p class="form-tip" id="regTip" style="display:none;"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- 主应用页面 -->
+  <div id="appPage" class="page">
+    <!-- 顶部导航 -->
+    <header class="app-header">
+      <div class="header-top">
+        <div class="header-left">
+          <span class="header-brand">⚽ 世界杯</span>
+        </div>
+        <div class="header-center">
+          <span class="header-time" id="headerTime">--</span>
+        </div>
+        <div class="header-right">
+          <span class="user-name" id="headerUsername"></span>
+          <button class="btn-logout" id="btnLogout">退出</button>
+        </div>
+      </div>
+      <div class="header-balance">
+        <div class="balance-card">
+          <span class="balance-label">锦鲤币余额</span>
+          <span class="balance-amount" id="headerBalance">0.00</span>
+          <img src="images/coin-front.png" class="coin-balance-icon">
+        </div>
+      </div>
+    </header>
+
+    <!-- 弹幕恭喜 -->
+    <div class="danmaku-overlay" id="danmakuOverlay"></div>
+
+    <!-- Tab导航 -->
+    <nav class="tab-nav">
+      <button class="nav-btn active" data-page="matches">
+        <span class="nav-icon">⚽</span>比赛竞猜
+      </button>
+      <button class="nav-btn" onclick="window.open('https://sports.cctv.cn/live/waicai8/','_blank')">
+        <span class="nav-icon">📺</span>比赛直播
+      </button>
+      <button class="nav-btn" data-page="bets">
+        <span class="nav-icon">📋</span>投注记录
+      </button>
+      <button class="nav-btn" data-page="leaderboard">
+        <span class="nav-icon">📊</span>奖金排行
+      </button>
+      <button class="nav-btn" data-page="account">
+        <span class="nav-icon">💰</span>账户明细
+      </button>
+      <button class="nav-btn" data-page="profile">
+        <span class="nav-icon">👤</span>我的
+      </button>
+    </nav>
+
+    <!-- 比赛竞猜页 -->
+    <main id="pageMatches" class="page-content active">
+      <div class="match-list" id="matchList"></div>
+    </main>
+
+    <!-- 投注记录页 -->
+    <main id="pageBets" class="page-content">
+      <div class="status-filter">
+        <button class="status-btn active" data-bet-status="all">全部</button>
+        <button class="status-btn" data-bet-status="pending">待开奖</button>
+        <button class="status-btn" data-bet-status="settled">已结算</button>
+      </div>
+      <div class="bet-list" id="betList"></div>
+    </main>
+
+    <!-- 奖金排行榜 -->
+    <main id="pageLeaderboard" class="page-content">
+      <div class="leaderboard-header">
+        <div class="leaderboard-title">🏆 线下锦鲤币排行榜</div>
+        <div class="leaderboard-subtitle">实时更新 · 前五名</div>
+      </div>
+      <div class="leaderboard-list" id="leaderboardList"></div>
+    </main>
+
+    <!-- 账户明细页 -->
+    <main id="pageAccount" class="page-content">
+      <div class="account-info-card" id="accountInfo"></div>
+      <div class="status-filter">
+        <button class="status-btn active" data-txn-type="all">全部</button>
+        <button class="status-btn" data-txn-type="recharge">充值</button>
+        <button class="status-btn" data-txn-type="withdraw">提现</button>
+        <button class="status-btn" data-txn-type="bet">投注</button>
+        <button class="status-btn" data-txn-type="win">中奖</button>
+      </div>
+      <div class="txn-list" id="txnList"></div>
+    </main>
+
+    <!-- 我的 -->
+    <main id="pageProfile" class="page-content">
+      <div class="profile-header-card">
+        <div class="profile-avatar" id="profileAvatar">⚽</div>
+        <div class="profile-name" id="profileNickname">-</div>
+        <div class="profile-account">账号: <span id="profileAccount">-</span></div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">基本信息</div>
+        <div class="profile-info-list">
+          <div class="profile-info-item">
+            <span class="profile-info-label">账号 ID</span>
+            <span class="profile-info-value" id="profileAccId">-</span>
+          </div>
+          <div class="profile-info-item">
+            <span class="profile-info-label">邮箱</span>
+            <span class="profile-info-value" id="profileEmail">-</span>
+          </div>
+          <div class="profile-info-item">
+            <span class="profile-info-label">昵称</span>
+            <div class="profile-info-actions">
+              <span class="profile-info-value" id="profileNickDisplay">-</span>
+              <button class="btn-profile-edit" id="btnEditNickname">修改</button>
+            </div>
+          </div>
+          <div class="profile-info-item">
+            <span class="profile-info-label">注册时间</span>
+            <span class="profile-info-value" id="profileRegTime">-</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-section">
+        <div class="profile-section-title">账户安全</div>
+        <div class="profile-info-item" style="cursor:pointer;" id="btnChangePwd">
+          <span class="profile-info-label">登录密码</span>
+          <span class="profile-info-arrow">修改 ></span>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- 投注弹窗 -->
+  <div class="modal-overlay" id="betModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>投注确认</h2>
+        <button class="modal-close" onclick="closeBetModal()">✕</button>
+      </div>
+      <div class="modal-body" id="betModalBody"></div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeBetModal()">取消</button>
+        <button class="btn-primary" id="btnConfirmBet">确认投注</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 个人资料编辑弹窗 -->
+  <div class="modal-overlay" id="profileModal">
+    <div class="modal-content modal-sm">
+      <div class="modal-header">
+        <h2 id="profileModalTitle">修改昵称</h2>
+        <button class="modal-close" onclick="closeProfileModal()">✕</button>
+      </div>
+      <div class="modal-body" id="profileModalBody"></div>
+      <div class="modal-footer">
+        <button class="btn-outline" onclick="closeProfileModal()">取消</button>
+        <button class="btn-primary" id="btnProfileConfirm">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 开奖动画弹窗 -->
+  <div class="modal-overlay" id="resultModal">
+    <div class="modal-content modal-sm result-modal">
+      <div class="result-animation" id="resultAnimation"></div>
+      <div class="modal-footer">
+        <button class="btn-primary" onclick="closeResultModal()">知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
